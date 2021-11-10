@@ -9,7 +9,7 @@ Either clone the repo or download de zip and extract. All that you need is the *
 ## Build the container
 > The next steps are for Linux users. On Windows try on powershell and on Mac you should not have trouble.
 >
-Change to the directory of the **Dockerfile**:
+Change to the directory to the **Dockerfile**:
 ```
 cd docker-pm-class
 ```
@@ -21,7 +21,7 @@ docker build . -t ros-melodic
 ## Build catkin workspace
 > It is possible that if you already created the workspace on ros melodic version you can skip this section
 >
-For simplicity sake, I suggest you move the old `catkin_ws` to another location or change the name so you can create a fresh new one, in any caset **DO NOT** keep CMakeLists.txt since we're are going to recompile and recreate the workspace.
+For simplicity sake, I suggest you move the old `catkin_ws` to another location or change the name so you can create a fresh new one, in any case **DO NOT** keep CMakeLists.txt since we're are going to recompile and recreate the workspace.
 
 After you have backed up everything you need, you have to recreate the folder:
 ```
@@ -53,10 +53,11 @@ Now the `root/catkin_ws` inside the container will have the contents of your wor
 Notice that now you're in the shell inside of the container.
 Now you'll create the workspace:
 ```
+cd /root/catkin_ws
 catkin_make
 ```
 ## Copy workspace
-Now copy only de source files you backup but **DO NOT** copy the CMakeLists.txt file.
+Now copy only the source files you backup but **DO NOT** copy the CMakeLists.txt file.
 
 Back to the running container, still inside the `/root/catkin_ws` folder run:
 
