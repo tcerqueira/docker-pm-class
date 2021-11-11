@@ -35,7 +35,7 @@ Your folder structure must be something like this:
 
 First you need to create the container in interactive mode and mount to your catkin workspace.
 ```
-# Change the path to you catkin folder
+# Change the path to your catkin folder
 docker run -it -v <path-to-your-catkin_ws-folder>:/root/catkin_ws --name ros ros-melodic
 ```
 This created a new container named 'ros'.
