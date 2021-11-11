@@ -19,20 +19,13 @@ RUN apt-get install -y ros-melodic-desktop-full
 
 # Set up environment
 RUN echo 'source ros_entrypoint.sh' >> /root/.bashrc
-RUN echo 'source /root/catkin_ws/devel/setup.bash' >> /root/.bashrc
 
 # Install simulator dependencies
+RUN apt install -y ros-$ROS_DISTRO-hector-gazebo-plugins ros-$ROS_DISTRO-velodyne-description
 RUN apt install -y libcgal-dev
 RUN apt install -y libcgal-demo
-# RUN wget https://github.com/CGAL/cgal/releases/download/v5.3/CGAL-5.3.tar.xz
-# RUN tar xavf CGAL-5.3.tar.xz
-# RUN cd CGAL-5.3; mkdir build; cd build; cmake ..; make install
 
 RUN apt-get install -y libgmp10 libgmp-dev
-# RUN curl -fLO https://gmplib.org/download/gmp/gmp-6.2.1.tar.xz
-# RUN tar -xf gmp-6.2.1.tar.xz
-# RUN cd gmp-6.2.1; ./configure --prefix=/opt/gmp;
-# RUN cd gmp-6.2.1; make all; make install; cp gmpxx.h /opt/gmp/include
-# RUN export GMP_INC=/opt/gmp/include
-# RUN export GMP_LIB=/opt/gmp/lib
 
+# Uncomment later
+# RUN echo 'source /root/catkin_ws/devel/setup.bash' >> /root/.bashrc

@@ -1,14 +1,14 @@
 # Using Docker for PM classes
 Hopefuly this solves compatibility issues and the VM limitations so everyone can work on classes and develop the projects instead of debugging dependencies or building problems.
+>**This process is specific to linux but the procedure itself should be similiar**.
+>
 ## Installing Docker
-Frist of, you need to install `docker`. For that I suggest to follow [Docker guide](https://docs.docker.com/get-docker/).
+First off, you need to install `docker`. For that I suggest to follow [Docker guide](https://docs.docker.com/get-docker/).
 
 ## Get the repo
 Either clone the repo or download de zip and extract. All that you need is the **Dockerfile**.
 
 ## Build the container
-> The next steps are for Linux users. On Windows try on powershell and on Mac you should not have trouble.
->
 Change to the directory to the **Dockerfile**:
 ```
 cd docker-pm-class
@@ -19,47 +19,48 @@ docker build . -t ros-melodic
 ```
 
 ## Build catkin workspace
-> It is possible that if you already created the workspace on ros melodic version you can skip this section
->
-For simplicity sake, I suggest you move the old `catkin_ws` to another location or change the name so you can create a fresh new one, in any case **DO NOT** keep CMakeLists.txt since we're are going to recompile and recreate the workspace.
+Now you need to create a folder for your catkin workspace (usually `catkin_ws`). Go inside the folder you just created and a make a new folder `src`.
 
-After you have backed up everything you need, you have to recreate the folder:
+If you already had a `catkin_ws` folder, I suggest you backup your source files **EXCEPT CMakeLists.txt**. Once you compile the fresh new workspace, it will create a new CMakeList.txt and you'll later paste the source files you backup.
+
+Your folder structure must be something like this:
 ```
-cd ~
-mkdir catkin_ws
-cd catkin_ws
-mkdir src
+.../
+    |
+    catkin_ws/
+            |
+            src/
 ```
 **Don't `catkin_make` yet**
 
-First you need to create the container in interactive mode and mount to your catkin workspace (In this case `~/catkin_ws`).
+First you need to create the container in interactive mode and mount to your catkin workspace.
 ```
-docker run -it -v ~/catkin_ws:/root/catkin_ws --name ros ros-melodic
+# Change the path to you catkin folder
+docker run -it -v <path-to-your-catkin_ws-folder>:/root/catkin_ws --name ros ros-melodic
 ```
 This created a new container named 'ros'.
 
-Useful commands:
-```
-# restart a container
-docker start ros
-# attach a shell to the container
-docker exec -it ros bash
-# stop a container
-docker stop ros
-```
+Now the `root/catkin_ws` inside the container will have the contents of the path you specified in the previous step (the path to your workspace). This way we can code outside the container but our files will be there.
 
-Now the `root/catkin_ws` inside the container will have the contents of your workspace.
-
-Notice that now you're in the shell inside of the container.
-Now you'll create the workspace:
+Notice that now you're in the shell inside of the container and should look something like this:
+```
+root@589ddd9bfdc7:/# 
+```
+> Note that docker will close the bash shell if it is given an error. To restart a shell attached to the container run `docker exec -it ros bash`.
+>
+> Furthermore if instead of an error it gives an exception the whole container you stop. To restart it run `docker start ros`.
+>
+> To check the running docker containers run `docker ps`.
+>
+Now you'll initialize the workspace:
 ```
 cd /root/catkin_ws
 catkin_make
 ```
-## Copy workspace
-Now copy only the source files you backup but **DO NOT** copy the CMakeLists.txt file.
+## Copy and compile workspace
+If you had an workspace now you need to copy only the source files you backup but **DO NOT** copy the CMakeLists.txt file.
 
-Back to the running container, still inside the `/root/catkin_ws` folder run:
+Back to the running container, still inside the `/root/catkin_ws` folder let's compile the code you pasted by runnning:
 
 >_Warning: this will be an intensive workload_
 >
@@ -69,10 +70,13 @@ catkin_make -j4
 # 4 is the number of threads
 ```
 ## Running ROS
-If you compiled the workspace inside the same session shell as right now, you need to source an enviroment.
+Now you need to source an enviroment.
 Go ahead and run:
 ```
 source /root/catkin_ws/devel/setup.bash
 ```
-Previous step is not necessary the next time you start a shell.
+> This must be called everytime you start a shell. There's a way but involves modifying the _Dockerfile_ and build a run the container again. Note that building the container wont take as much time as the first time because it will cache the previous image and build on top of it.
+>
 
+> I'm still working on x11 to see simulator windows.
+>
