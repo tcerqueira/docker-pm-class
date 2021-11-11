@@ -87,7 +87,7 @@ All you have to do is make sure the ros container is running.
 ```
 docker ps
 ```
-If it is not running you can start it with.
+If it is not running you can start it with:
 ```
 docker start ros
 ```
@@ -95,5 +95,5 @@ Then you can attach any number of bash shells to the container to run your ros p
 ```
 docker exec -it ros bash
 ```
-> You only have to start the container once unless an exception was thrown. In that case you need to restart it.
+> You only have to start the container once unless an exception was thrown. In that case you need to restart it (`docker start ros`).
 >
