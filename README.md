@@ -48,7 +48,7 @@ root@589ddd9bfdc7:/#
 ```
 > Note that docker will close the bash shell if it is given an error. To restart a shell attached to the container run `docker exec -it ros bash`.
 >
-> Furthermore if instead of an error it gives an exception the whole container you stop. To restart it run `docker start ros`.
+> Furthermore if instead of an error it gives an exception the whole container will stop. To restart it run `docker start ros`.
 >
 > To check the running docker containers run `docker ps`.
 >
@@ -69,7 +69,7 @@ Back to the running container, still inside the `/root/catkin_ws` folder let's c
 catkin_make -j4
 # 4 is the number of threads
 ```
-## Running ROS
+## Setup ROS
 Now you need to source an enviroment.
 Go ahead and run:
 ```
@@ -79,4 +79,21 @@ source /root/catkin_ws/devel/setup.bash
 >
 
 > I'm still working on x11 to see simulator windows.
+>
+Now you'll be able to run ros.
+
+## Running ROS
+All you have to do is make sure the ros container is running.
+```
+docker ps
+```
+If it is not running you can start it with.
+```
+docker start ros
+```
+Then you can attach any number of bash shells to the container to run your ros programs.
+```
+docker exec -it ros bash
+```
+> You only have to start the container once unless an exception was thrown. In that case you need to restart it.
 >
