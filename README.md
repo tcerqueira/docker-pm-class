@@ -10,11 +10,11 @@ Either clone the repo or download de zip and extract. All that you need is the *
 
 ## Build the container
 Change to the directory to the **Dockerfile**:
-```
+```bash
 cd docker-pm-class
 ```
 Build command:
-```
+```bash
 docker build . -t ros-melodic
 ```
 
@@ -33,17 +33,22 @@ Your folder structure must be something like this:
 ```
 **Don't `catkin_make` yet**
 
+## Run the container
+### Linux
 First you need to create the container in interactive mode and mount to your catkin workspace.
-```
+```bash
 # Change the path to your catkin folder
-docker run -it -v <path-to-your-catkin_ws-folder>:/root/catkin_ws --name ros ros-melodic
+docker run -it --rm -v <path-to-your-workspace>:/root/catkin_ws -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY -h $HOSTNAME -v $HOME/.Xauthority:/root/.Xauthority --name ros ros-melodic
 ```
-This created a new container named 'ros'.
+### Windows
+> TODO
+>
+Now the container is created and is named 'ros'.
 
 Now the `root/catkin_ws` inside the container will have the contents of the path you specified in the previous step (the path to your workspace). This way we can code outside the container but our files will be there.
 
 Notice that now you're in the shell inside of the container and should look something like this:
-```
+```bash
 root@589ddd9bfdc7:/# 
 ```
 > Note that docker will close the bash shell if it is given an error. To restart a shell attached to the container run `docker exec -it ros bash`.
@@ -53,7 +58,7 @@ root@589ddd9bfdc7:/#
 > To check the running docker containers run `docker ps`.
 >
 Now you'll initialize the workspace:
-```
+```bash
 cd /root/catkin_ws
 catkin_make
 ```
@@ -64,7 +69,7 @@ Back to the running container, still inside the `/root/catkin_ws` folder let's c
 
 >_Warning: this will be an intensive workload_
 >
-```
+```bash
 # eg:
 catkin_make -j4
 # 4 is the number of threads
@@ -72,7 +77,7 @@ catkin_make -j4
 ## Setup ROS
 Now you need to source an enviroment.
 Go ahead and run:
-```
+```bash
 source /root/catkin_ws/devel/setup.bash
 ```
 > This must be called everytime you start a shell. There's a way but involves modifying the _Dockerfile_ and build a run the container again. Note that building the container wont take as much time as the first time because it will cache the previous image and build on top of it.
@@ -83,17 +88,15 @@ source /root/catkin_ws/devel/setup.bash
 Now you'll be able to run ros.
 
 ## Running ROS
-All you have to do is make sure the ros container is running.
+You can check the status of your running containers:
 ```
 docker ps
 ```
-If it is not running you can start it with:
+Start the container:
+```bash
+docker run -it --rm -v <path-to-your-workspace>:/root/catkin_ws -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY -h $HOSTNAME -v $HOME/.Xauthority:/root/.Xauthority --name ros ros-melodic
 ```
-docker start ros
-```
-Then you can attach any number of bash shells to the container to run your ros programs.
-```
+Then you can attach more bash shells to the container to run your ros programs.
+```bash
 docker exec -it ros bash
 ```
-> You only have to start the container once unless an exception was thrown. In that case you need to restart it (`docker start ros`).
->

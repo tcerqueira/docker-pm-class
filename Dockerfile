@@ -16,16 +16,12 @@ RUN apt install -y cmake
 
 # Install ros-melodic-desktop-full dependencies
 RUN apt-get install -y ros-melodic-desktop-full
-
-# Set up environment
-RUN echo 'source ros_entrypoint.sh' >> /root/.bashrc
-
-# Install simulator dependencies
+# Install other dependencies
 RUN apt install -y ros-$ROS_DISTRO-hector-gazebo-plugins ros-$ROS_DISTRO-velodyne-description
 RUN apt install -y libcgal-dev
 RUN apt install -y libcgal-demo
-
 RUN apt-get install -y libgmp10 libgmp-dev
 
-# Uncomment later
-# RUN echo 'source /root/catkin_ws/devel/setup.bash' >> /root/.bashrc
+# Set up environment
+RUN echo 'source ros_entrypoint.sh' >> /root/.bashrc
+RUN echo 'test -f /root/catkin_ws/devel/setup.bash && source /root/catkin_ws/devel/setup.bash' >> /root/.bashrc
