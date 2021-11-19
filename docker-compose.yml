@@ -1,0 +1,28 @@
+version: '3'
+services:
+  ros:
+    image: ros-melodic
+    stdin_open: true
+    tty: true
+    # change this to your hostname (echo $HOSTNAME and copy)
+    hostname: pop-os
+    # dont forget to change the worksapce folder
+    volumes:
+      - ~/catkin_ws:/root/catkin_ws
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $HOME/.Xauthority:/root/.Xauthority
+    environment:
+      - DISPLAY=$DISPLAY
+
+  ros-win:
+    image: ros-melodic
+    stdin_open: true
+    tty: true
+    # dont forget to change the worksapce folder
+    volumes:
+      - ~/catkin_ws:/root/catkin_ws
+    # dont forget to change your ip
+    environment:
+      - DISPLAY=192.x.x.x:0.0
+      - LIBGL_ALWAYS_INDIRECT=0
+

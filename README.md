@@ -119,5 +119,22 @@ Then you can attach more bash shells to the container to run your ros programs.
 ```bash
 docker exec -it ros bash
 ```
+## Docker compose
+You can set up a docker-compose instead, to run your configurations so you don't have to run a giant command everytime.
+
+You need to first install [docker compose](https://docs.docker.com/compose/install/).
+
+The 'ros' service is for linux and the 'ros-win' service is for Windows. Change the paths, hostnames and ips if needed accordingly (similiar to the `docker run` command).
+
+> For Linux:
+>
+```
+    docker-compose run --rm ros bash
+```
+> For Windows:
+>
+```
+    docker-compose run --rm ros-win bash
+```
 ## Quit PM
 Now you can work on your main machine in your favorite IDE or editor instead of the slow bugged VM!
